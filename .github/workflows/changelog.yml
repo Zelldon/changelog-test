@@ -5,8 +5,8 @@ name: Generate Changelog
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "zell-test" branch
-  release: 
-    types: [published]
+  release: {}
+    # types: [published]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch: {}
 
@@ -17,21 +17,25 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
-      ZCL_TARGET_REV: $GITHUB_REF_NAME
+      ZCL_TARGET_REV: GITHUB_REF_NAME
       ZCL_FROM_REV: ""
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
       # Runs a single command using the runners shell
       - name: Download changelog
         run: |
           wget -c "https://github.com/zeebe-io/zeebe-changelog/releases/download/0.7.0/zeebe-changelog_0.7.0_Linux_x86_64.tar.gz" -O - | tar -xz
           ls -la
           echo "Hello, world!"
-          echo ${{ github.event }}
+          echo ${{ github.payload }}
           echo "======"
           env
           export ZCL_FROM_REV=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1 --max-count=1`) # get prev tag
