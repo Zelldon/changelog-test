@@ -24,6 +24,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -33,11 +36,7 @@ jobs:
       - name: Download changelog
         run: |
           wget -c "https://github.com/zeebe-io/zeebe-changelog/releases/download/0.7.0/zeebe-changelog_0.7.0_Linux_x86_64.tar.gz" -O - | tar -xz
-          ls -la
-          echo "Hello, world!"
-          echo ${{ github.payload }}
-          echo "======"
-          env
+          # env
           export ZCL_TARGET_REV=${{ github.event.release.tag_name }}
           export ZCL_FROM_REV=$( git describe --abbrev=0 --tags $ZCL_TARGET_REV^) # get prev tag          
           echo $ZCL_FROM_REV
