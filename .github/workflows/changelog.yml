@@ -17,7 +17,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
-      ZCL_TARGET_REV: GITHUB_REF_NAME
+      ZCL_TARGET_REV: ${{ github.event.release.tag_name }}
       ZCL_FROM_REV: ""
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -38,7 +38,7 @@ jobs:
           echo ${{ github.payload }}
           echo "======"
           env
-          export ZCL_TARGET_REV=${{ github.event.tag_name }}
+          export ZCL_TARGET_REV=${{ github.event.release.tag_name }}
           export ZCL_FROM_REV=$( git describe --abbrev=0 --tags ZCL_TARGET_REV^) # get prev tag          
           echo $ZCL_FROM_REV
           echo $ZCL_TARGET_REV
