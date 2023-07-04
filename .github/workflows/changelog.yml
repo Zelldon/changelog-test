@@ -32,7 +32,7 @@ jobs:
           echo "Hello, world!"
           echo ${{ github.event.payload }}
           env
-          zcl add-labels --token=${{ secrets.GITHUB_TOKEN }} --from=$ZCL_FROM_REV --target=$ZCL_TARGET_REV  --label=\"release/$ZCL_TARGET_REV\" --org zelldon --repo changelog-test
+          ./zcl add-labels --token=${{ secrets.GITHUB_TOKEN }} --from=$ZCL_FROM_REV --target=$ZCL_TARGET_REV  --label=\"release/$ZCL_TARGET_REV\" --org zelldon --repo changelog-test
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
