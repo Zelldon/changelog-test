@@ -5,8 +5,8 @@ name: Generate Changelog
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "zell-test" branch
-  release: {}
-    # types: [published]
+  release:
+    types: [published]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch: {}
 
@@ -39,6 +39,7 @@ jobs:
           echo "======"
           env
           export ZCL_FROM_REV=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1 --max-count=1`) # get prev tag
+          export ZCL_TARGET_REV=${{ github.event.tag_name }}
           echo $ZCL_FROM_REV
           echo $ZCL_TARGET_REV
           ./zcl add-labels --token=${{ secrets.GITHUB_TOKEN }} --from=$ZCL_FROM_REV --target=$ZCL_TARGET_REV  --label=\"release/$ZCL_TARGET_REV\" --org zelldon --repo changelog-test
